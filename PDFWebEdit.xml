@@ -223,6 +223,17 @@
             An IActionResult.
             </returns>
         </member>
+        <member name="M:PDFWebEdit.Controllers.DocumentController.ReorderDuplex(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.String)">
+            <summary>
+            Reorder duplex scan.
+            </summary>
+            <param name="targetDirectory">The target directory.</param>
+            <param name="document">The document.</param>
+            <param name="subDirectory">The sub directory containing the document.</param>
+            <returns>
+            An IActionResult.
+            </returns>
+        </member>
         <member name="M:PDFWebEdit.Controllers.DocumentController.SplitPages(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.Collections.Generic.List{System.Int32},System.String)">
             <summary>
             Splits the pages into a new document.
@@ -894,6 +905,14 @@
             </summary>
             <value>
             True if show reverse page order, false if not.
+            </value>
+        </member>
+        <member name="P:PDFWebEdit.Models.Config.InboxConfig.ShowReorderDuplex">
+            <summary>
+            Gets or sets a value indicating whether the reorder duplex scan is shown.
+            </summary>
+            <value>
+            True if show reorder duplex scan, false if not.
             </value>
         </member>
         <member name="P:PDFWebEdit.Models.Config.InboxConfig.ShowMerge">
@@ -1818,6 +1837,14 @@
             <param name="document">The document.</param>
             <param name="subDirectory">Subdirectory storing document.</param>
         </member>
+        <member name="M:PDFWebEdit.Services.IPDFManipulationService.ReorderDuplex(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.String)">
+            <summary>
+            Reorder duplay scan.
+            </summary>
+            <param name="targetDirectory">Target directory.</param>
+            <param name="document">The document.</param>
+            <param name="subDirectory">Subdirectory storing document.</param>
+        </member>
         <member name="M:PDFWebEdit.Services.IPDFManipulationService.SplitPages(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.Collections.Generic.List{System.Int32},System.String)">
             <summary>
             Splits the pages into a new document.
@@ -1969,6 +1996,16 @@
             <param name="document">The document.</param>
             <param name="subDirectory">Subdirectory storing document.</param>
             <seealso cref="M:PDFWebEdit.Services.IPDFManipulationService.ReversePagesOrder(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.String)"/>
+        </member>
+        <member name="M:PDFWebEdit.Services.iTextPDFManipulationService.ReorderDuplex(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.String)">
+            <summary>
+            Reorder duplex scan.
+            </summary>
+            <exception cref="T:System.Exception">Thrown when an exception error condition occurs.</exception>
+            <param name="targetDirectory">Target directory.</param>
+            <param name="document">The document.</param>
+            <param name="subDirectory">Subdirectory storing document.</param>
+            <seealso cref="M:PDFWebEdit.Services.IPDFManipulationService.ReorderDuplex(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.String)"/>
         </member>
         <member name="M:PDFWebEdit.Services.iTextPDFManipulationService.SplitPages(PDFWebEdit.Enumerations.TargetDirectory,System.String,System.Collections.Generic.List{System.Int32},System.String)">
             <summary>

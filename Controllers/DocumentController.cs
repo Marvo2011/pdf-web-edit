@@ -515,6 +515,45 @@ namespace PDFWebEdit.Controllers
             }
         }
 
+/// <summary>
+        /// Reorder duplex scan.
+        /// </summary>
+        /// <param name="targetDirectory">The target directory.</param>
+        /// <param name="document">The document.</param>
+        /// <param name="subDirectory">The sub directory containing the document.</param>
+        /// <returns>
+        /// An IActionResult.
+        /// </returns>
+        [HttpPost]
+        [Route("reorder-duplex/{targetDirectory}/{document}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
+        [ProducesErrorResponseType(typeof(ObjectResult))]
+        public IActionResult ReorderDuplex(TargetDirectory targetDirectory, string document, string? subDirectory = null)
+        {
+            // Get the path to the document
+            var path = _directoryService.GetDocumentPath(targetDirectory, subDirectory, document);
+
+            if (path != null)
+            {
+                try
+                {
+                    _pdfManipulationService.ReorderDuplex(targetDirectory, document, subDirectory);
+
+                    return Ok();
+                }
+                catch (Exception x)
+                {
+                    return ExceptionHelpers.GetErrorObjectResult("Reverse", HttpContext, x);
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         /// <summary>
         /// Splits the pages into a new document.
         /// </summary>

@@ -110,6 +110,7 @@
       "showRotateClockwise": "Show Rotate Clockwise",
       "showRotateAntiClockwise": "Show Rotate Anti-Clockwise",
       "showReversePageOrder": "Show Reverse Page Order",
+      "showReorderDuplex": "Show Reorder Duplex Scan",
       "showSelectAll": "Show Select All",
       "showUnselect": "Show Unselect",
       "batchShowArchive": "Show Archive (batch)",

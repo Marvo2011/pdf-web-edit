@@ -53,6 +53,14 @@ namespace PDFWebEdit.Services
         public void ReversePagesOrder(TargetDirectory targetDirectory, string document, string? subDirectory = null);
 
         /// <summary>
+        /// Reorder duplex scan.
+        /// </summary>
+        /// <param name="targetDirectory">Target directory.</param>
+        /// <param name="document">The document.</param>
+        /// <param name="subDirectory">Subdirectory storing document.</param>
+        public void ReorderDuplex(TargetDirectory targetDirectory, string document, string? subDirectory = null);
+
+        /// <summary>
         /// Splits the pages into a new document.
         /// </summary>
         /// <param name="targetDirectory">Target directory.</param>

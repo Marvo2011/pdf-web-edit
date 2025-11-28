@@ -62,6 +62,14 @@
         public bool ShowReversePageOrder { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the reorder duplex scan is shown.
+        /// </summary>
+        /// <value>
+        /// True if show reverse page order, false if not.
+        /// </value>
+        public bool ShowReorderDuplex { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets a value indicating whether the merge is shown.
         /// </summary>
         /// <value>

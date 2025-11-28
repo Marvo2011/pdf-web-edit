@@ -110,6 +110,7 @@
       "showRotateClockwise": "Afficher Rotation horaire",
       "showRotateAntiClockwise": "Afficher Rotation anti-horaire",
       "showReversePageOrder": "Afficher l'ordre inverse des pages",
+      "showReorderDuplex": "Afficher Réorganiser Numérisation duplex", 
       "showSelectAll": "Afficher Sélectionner tout",
       "showUnselect": "Afficher Désélectionner",
       "batchShowArchive": "Afficher l'archive (lot)",

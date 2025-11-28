@@ -266,6 +266,67 @@ namespace PDFWebEdit.Services
         }
 
         /// <summary>
+        ///  Reorder duplex scan.
+        /// </summary>
+        /// <exception cref="Exception">Thrown when an exception error condition occurs.</exception>
+        /// <param name="targetDirectory">Target directory.</param>
+        /// <param name="document">The document.</param>
+        /// <param name="subDirectory">Subdirectory storing document.</param>
+        /// <seealso cref="IPDFManipulationService.ReorderDuplex(TargetDirectory,string,string?)"/>
+        public void ReorderDuplex(TargetDirectory targetDirectory, string document, string? subDirectory = null)
+        {
+            var path = _directoryService.GetDocumentPath(targetDirectory, subDirectory, document);
+            var outPath = _directoryService.GetEditingDocumentPath(targetDirectory, subDirectory, document);
+
+            // Check if the doc exists
+            if (path == null)
+            {
+                throw new Exception($"The document does not exist: {path}");
+            }
+
+            byte[]? bytes = null;
+
+            using (var open = File.OpenRead(path))
+            using (var save = new MemoryStream())
+            {
+                // Open the document
+                using (var sourceDocument = new PdfDocument(new PdfReader(open)))
+                using (var targetDocument = new PdfDocument(new PdfWriter(save)))
+                {
+                    int totalPageCount = sourceDocument.GetNumberOfPages();
+
+                    if (totalPageCount % 2 != 0) 
+                        throw new Exception("The document must contain an even number of pages (front + back).");
+
+                    int halfPageCount = totalPageCount / 2;
+
+                    // Create the reorder list
+                    List<int> newPageOrder = new List<int>(total);
+
+                    for (int i = 1; i <= halfPageCount; i++)
+                    {
+                        newPageOrder.Add(i);                    // front
+                        newPageOrder.Add(halfPageCount + i);    // back
+                    }
+
+                    // Copy the pages into the new document
+                    sourceDocument.CopyPagesTo(newPageOrder, targetDocument);
+
+                    // Close the doc before getting the bytes from the memory stream
+                    // otherwise the output file is corrupt
+                    targetDocument.Close();
+                    sourceDocument.Close();
+
+                    // Store the doc 
+                    bytes = save.ToArray();
+                }
+            }
+
+            // Write the file
+            FileHelpers.WriteFile(outPath, bytes);
+        }
+
+        /// <summary>
         /// Splits the pages into a new document.
         /// </summary>
         /// <param name="targetDirectory">Target directory.</param>

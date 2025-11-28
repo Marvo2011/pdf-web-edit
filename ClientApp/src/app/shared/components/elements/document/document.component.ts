@@ -127,6 +127,13 @@ export class DocumentComponent implements OnInit, AfterViewInit {
       enabled: new BehaviorSubject<boolean>(true),
       function: this.reverseOrder.bind(this)
     }, {
+      label: "documents.buttons.reorderDuplex",
+      icon: "bi bi-bezier2",
+      separator: false,
+      if: this.config.inboxConfig.showReorderDuplex,
+      enabled: new BehaviorSubject<boolean>(true),
+      function: this.reorderDuplex.bind(this)
+    }, {
       label: "documents.buttons.remove",
       icon: "bi bi-x-lg",
       separator: true,
@@ -444,6 +451,22 @@ export class DocumentComponent implements OnInit, AfterViewInit {
     this.setPagesUnloaded(allPageNumbers);
 
     this.api.reversePagesOrder(this.directory, this.document.name, this.document.directory).subscribe(() => {
+
+      this.loadDocumentPages();
+      this.setDocumentModifiedState(true);
+
+    }, error => {
+      this.loadDocumentPages();
+      this.uiService.showMessageBox(error);
+    });
+  }
+
+  reorderDuplex() {
+
+    let allPageNumbers = this.getAllPageNumbers();
+    this.setPagesUnloaded(allPageNumbers);
+
+    this.api.reorderDuplex(this.directory, this.document.name, this.document.directory).subscribe(() => {
 
       this.loadDocumentPages();
       this.setDocumentModifiedState(true);

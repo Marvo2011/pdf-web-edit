@@ -1206,6 +1206,77 @@ export class DocumentClient {
     }
 
     /**
+     * Reorder duplex scan.
+     * @param targetDirectory The target directory.
+     * @param document The document.
+     * @param subDirectory (optional) The sub directory containing the document.
+     * @return An IActionResult.
+     */
+    reorderDuplex(targetDirectory: TargetDirectory, document: string, subDirectory?: string | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/documents/reverse-pages-order/{targetDirectory}/{document}?";
+        if (targetDirectory === undefined || targetDirectory === null)
+            throw new Error("The parameter 'targetDirectory' must be defined.");
+        url_ = url_.replace("{targetDirectory}", encodeURIComponent("" + targetDirectory));
+        if (document === undefined || document === null)
+            throw new Error("The parameter 'document' must be defined.");
+        url_ = url_.replace("{document}", encodeURIComponent("" + document));
+        if (subDirectory !== undefined && subDirectory !== null)
+            url_ += "subDirectory=" + encodeURIComponent("" + subDirectory) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReorderDuplex(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReorderDuplex(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+protected processReorderDuplex(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("A server side error occurred.", status, _responseText, _headers);
+            }));
+        } else if (status === 500) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result500: any = null;
+            let resultData500 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result500 = resultData500 ? ProblemDetails.fromJS(resultData500) : <any>null;
+            return throwException("A server side error occurred.", status, _responseText, _headers, result500);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * Splits the pages into a new document.
      * @param targetDirectory The target directory.
      * @param document The document.
@@ -2946,6 +3017,8 @@ export class InboxConfig implements IInboxConfig {
     showRename!: boolean;
     /** Gets or sets a value indicating whether the reverse page order is shown. */
     showReversePageOrder!: boolean;
+    /** Gets or sets a value indicating whether the reorder duplex scan is shown. */
+    showReorderDuplex!: boolean;
     /** Gets or sets a value indicating whether the merge is shown. */
     showMerge!: boolean;
     /** Gets or sets a value indicating whether the split is shown. */
@@ -2991,6 +3064,7 @@ export class InboxConfig implements IInboxConfig {
             this.showArchive = _data["showArchive"] !== undefined ? _data["showArchive"] : <any>null;
             this.showRename = _data["showRename"] !== undefined ? _data["showRename"] : <any>null;
             this.showReversePageOrder = _data["showReversePageOrder"] !== undefined ? _data["showReversePageOrder"] : <any>null;
+            this.showReorderDuplex = _data["showReorderDuplex"] !== undefined ? _data["showReorderDuplex"] : <any>null;
             this.showMerge = _data["showMerge"] !== undefined ? _data["showMerge"] : <any>null;
             this.showSplit = _data["showSplit"] !== undefined ? _data["showSplit"] : <any>null;
             this.showRemove = _data["showRemove"] !== undefined ? _data["showRemove"] : <any>null;
@@ -3023,6 +3097,7 @@ export class InboxConfig implements IInboxConfig {
         data["showArchive"] = this.showArchive !== undefined ? this.showArchive : <any>null;
         data["showRename"] = this.showRename !== undefined ? this.showRename : <any>null;
         data["showReversePageOrder"] = this.showReversePageOrder !== undefined ? this.showReversePageOrder : <any>null;
+        data["showReorderDuplex"] = this.showReorderDuplex !== undefined ? this.showReorderDuplex : <any>null;
         data["showMerge"] = this.showMerge !== undefined ? this.showMerge : <any>null;
         data["showSplit"] = this.showSplit !== undefined ? this.showSplit : <any>null;
         data["showRemove"] = this.showRemove !== undefined ? this.showRemove : <any>null;
@@ -3056,6 +3131,8 @@ export interface IInboxConfig {
     showRename: boolean;
     /** Gets or sets a value indicating whether the reverse page order is shown. */
     showReversePageOrder: boolean;
+    /** Gets or sets a value indicating whether the reorder duplex scan is shown. */
+    showReorderDuplex: boolean;
     /** Gets or sets a value indicating whether the merge is shown. */
     showMerge: boolean;
     /** Gets or sets a value indicating whether the split is shown. */
