@@ -25,6 +25,7 @@
       "rotateClockwise": "Rotation horaire",
       "rotateAntiClockwise": "Rotation anti-horaire",
       "reversePageOrder": "Ordre inverse des pages",
+      "reorderDuplex": "Réorganiser la numérisation recto verso",
       "remove": "Supprimer",
       "split": "Diviser",
       "merge": "Fusionner",

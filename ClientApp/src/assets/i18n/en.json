@@ -25,6 +25,7 @@
       "rotateClockwise": "Rotate Clockwise",
       "rotateAntiClockwise": "Rotate Anti-Clockwise",
       "reversePageOrder": "Reverse Page Order",
+      "reorderDuplex": "Reorder Duplex Scan",
       "remove": "Remove",
       "split": "Split",
       "merge": "Merge",
