@@ -305,8 +305,8 @@ namespace PDFWebEdit.Services
 
                     for (int i = 1; i <= halfPageCount; i++)
                     {
-                        newPageOrder.Add(i);                    // front
-                        newPageOrder.Add(halfPageCount + i);    // back
+                        newPageOrder.Add(i);                            // front
+                        newPageOrder.Add(totalPageCount - (i - 1));     // back
                     }
 
                     // Copy the pages into the new document
