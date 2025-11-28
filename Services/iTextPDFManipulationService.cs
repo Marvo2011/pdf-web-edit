@@ -301,7 +301,7 @@ namespace PDFWebEdit.Services
                     int halfPageCount = totalPageCount / 2;
 
                     // Create the reorder list
-                    List<int> newPageOrder = new List<int>(total);
+                    List<int> newPageOrder = new List<int>(totalPageCount);
 
                     for (int i = 1; i <= halfPageCount; i++)
                     {
